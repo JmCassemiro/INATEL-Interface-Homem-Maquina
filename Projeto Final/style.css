@@ -248,3 +248,47 @@ p  { font-family: "Arimo", sans-serif; font-weight: 400; font-size: 11px; color:
 }
 
 /* Reuso de .chip-btn para ações dentro do modal já está acima */
+/* ====== FIX: botões do modal de vaga ====== */
+
+/* garante que a seção de ações apareça e alinhe como chip */
+.job-modal-section.actions {
+  display: flex !important;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+
+/* deixa os botões com a mesma “cara” dos chips do app */
+.chip-btn {
+  background-color: var(--frequencia);      /* mesma cor dos chips */
+  color: #fff;                               /* p_lable já usa branco, reforçamos */
+  padding: 7px 15px;
+  border-radius: 999px;
+  display: inline-flex;                      /* centraliza verticalmente */
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  text-decoration: none;                     /* caso vire <a> no futuro */
+  line-height: 1;                            /* deixa compacto */
+}
+
+/* hover igual ao das outras ações */
+.chip-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+  filter: brightness(1.03);
+}
+
+/* acessibilidade: foco visível no teclado */
+.chip-btn:focus-visible {
+  outline: 2px solid var(--cor-click);
+  outline-offset: 2px;
+}
+
+/* (opcional) se o modal tiver algum CSS ocultando a seção */
+.job-modal-section.actions[hidden],
+.job-modal-section.actions.is-hidden {
+  display: flex !important;
+}

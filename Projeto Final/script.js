@@ -140,7 +140,7 @@ customElements.define('aulas-component', AulasComponent);
   };
   const getDateKey = (j) => j.anuncio || j.recente || '1970-01-01';
 
-  // Heurísticas simples p/ techs e salário (evita hardcode 1 por 1)
+  // Heurísticas simples p/ techs e salário
   const inferTechs = (titulo) => {
     const t = titulo.toLowerCase();
     const tags = new Set();
@@ -165,7 +165,7 @@ customElements.define('aulas-component', AulasComponent);
   // --- Referências de UI
   const searchEl = document.getElementById('job_search');
   const tipoEl   = document.getElementById('filter_tipo');
-  const modalEl  = document.getElementById('filter_modalidade');
+  const modalEl  = document.getElementById('filter_modalidade'); // select de Modalidade
   const sortEl   = document.getElementById('sort_by');
 
   const tabAll     = document.getElementById('tab_all');
@@ -248,16 +248,16 @@ customElements.define('aulas-component', AulasComponent);
   function applyFilters() {
     const q    = (searchEl?.value || '').trim().toLowerCase();
     const tipo = tipoEl?.value || '';
-    const mod  = modalEl?.value || '';
+    theMod     = modalEl?.value || '';
     const sort = sortEl?.value || 'recentes';
 
     let arr = jobs.slice();
     if (activeTab === 'applied') arr = arr.filter(j => j.applied);
     if (activeTab === 'saved')   arr = arr.filter(j => j.saved);
 
-    if (tipo) arr = arr.filter(j => j.tipo === tipo);
-    if (mod)  arr = arr.filter(j => j.modalidade === mod);
-    if (q)    arr = arr.filter(j =>
+    if (tipo)   arr = arr.filter(j => j.tipo === tipo);
+    if (theMod) arr = arr.filter(j => j.modalidade === theMod);
+    if (q)      arr = arr.filter(j =>
       j.titulo.toLowerCase().includes(q) ||
       j.empresa.toLowerCase().includes(q)
     );
@@ -380,27 +380,33 @@ customElements.define('aulas-component', AulasComponent);
   }
 
   /* ========= MODAL ========= */
-  let modalElRoot = null;
+  let modalRoot = null;
+  let escBound = false;
+
   function ensureModalRoot() {
-    if (modalElRoot) return modalElRoot;
-    modalElRoot = document.createElement('div');
-    modalElRoot.id = 'job_modal';
-    modalElRoot.setAttribute('aria-modal', 'true');
-    modalElRoot.setAttribute('role', 'dialog');
-    modalElRoot.innerHTML = `<div class="job-modal-content" role="document"></div>`;
-    document.body.appendChild(modalElRoot);
+    if (modalRoot) return modalRoot;
+    modalRoot = document.createElement('div');
+    modalRoot.id = 'job_modal';
+    modalRoot.setAttribute('aria-modal', 'true');
+    modalRoot.setAttribute('role', 'dialog');
+    modalRoot.innerHTML = `<div class="job-modal-content" role="document"></div>`;
+    document.body.appendChild(modalRoot);
+
     // Fechar ao clicar fora
-    modalElRoot.addEventListener('click', (e) => {
+    modalRoot.addEventListener('click', (e) => {
       if (e.target.id === 'job_modal') closeModal();
     });
-    // ESC fecha
-    document.addEventListener('keydown', (e) => {
-      if (modalElRoot.classList.contains('show') && e.key === 'Escape') closeModal();
-    });
-    return modalElRoot;
+    // ESC fecha (uma única vez)
+    if (!escBound) {
+      document.addEventListener('keydown', (e) => {
+        if (modalRoot.classList.contains('show') && e.key === 'Escape') closeModal();
+      });
+      escBound = true;
+    }
+    return modalRoot;
   }
 
-  function openModal(job) {
+  function renderModalContent(job) {
     const root = ensureModalRoot();
     const content = root.querySelector('.job-modal-content');
 
@@ -451,24 +457,38 @@ customElements.define('aulas-component', AulasComponent);
       </div>
     `;
 
-    // Listeners internos (fechar / aplicar / salvar)
-    content.querySelector('.job-modal-close')?.addEventListener('click', closeModal);
-    content.addEventListener('click', (e) => {
-      const btnApply = e.target.closest('.job-apply');
-      const btnSave  = e.target.closest('.job-save');
-      if (btnApply) { toggleApplied(parseInt(btnApply.dataset.id, 10)); /* reabre com estado atual */ openModal(jobs.find(j => j.id === job.id)); }
-      if (btnSave)  { toggleSaved(parseInt(btnSave.dataset.id, 10));   openModal(jobs.find(j => j.id === job.id)); }
+    // Bind direto nos botões (reaplicado a cada render do modal)
+    const btnClose = content.querySelector('.job-modal-close');
+    const btnApply = content.querySelector('.job-apply');
+    const btnSave  = content.querySelector('.job-save');
+
+    btnClose?.addEventListener('click', closeModal);
+
+    btnApply?.addEventListener('click', () => {
+      const id = parseInt(btnApply.dataset.id, 10);
+      toggleApplied(id);                       // atualiza estado + lista
+      const updated = jobs.find(j => j.id === id);
+      if (updated) renderModalContent(updated); // re-render modal (rebinda handlers)
     });
 
-    root.classList.add('show');
+    btnSave?.addEventListener('click', () => {
+      const id = parseInt(btnSave.dataset.id, 10);
+      toggleSaved(id);                         // atualiza estado + lista
+      const updated = jobs.find(j => j.id === id);
+      if (updated) renderModalContent(updated); // re-render modal (rebinda handlers)
+    });
+  }
+
+  function openModal(job) {
+    ensureModalRoot();
+    renderModalContent(job);
+    modalRoot.classList.add('show');
     document.body.style.overflow = 'hidden';
-    // Acessibilidade: focar no botão de fechar
-    setTimeout(() => content.querySelector('.job-modal-close')?.focus(), 0);
   }
 
   function closeModal() {
-    if (!modalElRoot) return;
-    modalElRoot.classList.remove('show');
+    if (!modalRoot) return;
+    modalRoot.classList.remove('show');
     document.body.style.overflow = '';
   }
 
