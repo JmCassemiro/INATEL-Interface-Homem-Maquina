@@ -1,0 +1,250 @@
+/* === Imports devem vir primeiro === */
+@import url("https://fonts.googleapis.com/css?family=Arimo");
+
+:root {
+  --cor-click: #126ae2; /* Click */
+  --cor-sombra: #0a599b; /* Azul Escuro */
+  --cor-text: black; /* Preto */
+  --cor-back1: #edf2f4; /* Azul claro */
+  --cor-back2: #6a937a; /* Verde Escuro */
+
+  --md-sys-color-primary: #126ae2;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #edf2f4;
+  --md-sys-color-on-primary-container: #002020;
+
+  --frequencia: #126ae2;
+  --nota: #126ae2;
+  --prova: #126ae2;
+}
+
+/* Base */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--cor-back1);
+  font-family: "Arimo", sans-serif;
+  color: var(--cor-text);
+}
+
+/* Header */
+header { position: relative; height: 35px; top: 0; left: 0; right: 0; }
+#menu { position: absolute; left: 0; top: 10px; margin-left: 15px; cursor: pointer; }
+#logo { position: absolute; top: 13px; left: 50%; transform: translate(-50%); }
+.svg_logo { width: 80px; }
+.path_logo { fill: var(--cor-click); }
+#perfil { position: absolute; right: 0; top: 10px; margin-right: 15px; }
+
+/* Cartões / containers brancos */
+#mensagens, #componentes, .comp-aula {
+  position: relative;
+  background-color: #fff;
+  top: 0; left: 0; right: 0;
+  padding: 15px; margin: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+#user_name { display: block; font-size: 17pt; }
+#mns_box { position: relative; margin-top: 5px; }
+#icon { width: 18px; display: inline-block; vertical-align: top; margin-top: 5px; }
+#mns { padding: 5px; width: 80%; display: inline-block; }
+
+/* Material Symbols */
+.material-symbols-outlined {
+  color: var(--cor-click);
+  font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+}
+.icoG { font-size: 30px; }
+.icoP { font-size: 18px; }
+
+/* Tipografia */
+.font { font-family: "Arimo", sans-serif; font-weight: 400; font-size: 11px; color: var(--cor-text); }
+h3 { font-family: "Arimo", sans-serif; font-weight: 600; font-size: 14px; color: var(--cor-text); padding: 0 5px; margin: 0 0 6px 0; }
+p  { font-family: "Arimo", sans-serif; font-weight: 400; font-size: 11px; color: var(--cor-text); line-height: 1.5; padding: 0 5px; margin: 0; }
+
+/* Menu lateral/modal */
+#menu_aba {
+  height: 100%; width: 100%;
+  position: fixed; top: 0; left: 0;
+  background-color: #fff; overflow-x: hidden;
+  transition: 0.5s; z-index: 1; display: none; border-radius: 10px;
+}
+#menu_bot {
+  position: relative; padding: 20px; display: block; cursor: pointer;
+  font-family: "Arimo", sans-serif; font-weight: 600; font-size: 14pt;
+  color: var(--cor-click); transition: 0.5s;
+}
+
+/* Carousel */
+.carousel-container {
+  position: relative; overflow: hidden; background-color: #fff;
+  border-radius: 10px; margin: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.carousel { display: flex; transition: transform 0.5s ease-in-out; }
+.card { min-width: 100%; text-align: center; }
+.card img { width: 100%; display: block; border-top-right-radius: 10px; border-top-left-radius: 10px; }
+.info { padding: 10px; }
+.icon { font-size: 15px; margin: 0 2px 0 5px; width: 18px; display: inline-block; vertical-align: middle; }
+
+/* Botões do carousel — escopados */
+.carousel-container button {
+  position: absolute; top: 30%; transform: translateY(-50%);
+  background: rgba(0,0,0,0.5); color: #fff; border: none; padding: 10px;
+  cursor: pointer; font-size: 10px; border-radius: 6px; line-height: 1;
+}
+.carousel-container button:focus-visible { outline: 2px solid var(--cor-click); outline-offset: 2px; }
+.carousel-container #prevBtn { left: 10px; }
+.carousel-container #nextBtn { right: 10px; }
+
+/* Componentes “aula” */
+.titulo_aula {
+  font-family: "Arimo", sans-serif; font-weight: 700; font-size: 15px; color: var(--cor-text);
+  padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lables { display: flex; gap: 10px; }
+.lable-prova, .lable-frequencia, .lable-nota {
+  padding: 7px 15px; border-radius: 500px; text-align: center; color: #fff;
+}
+.lable-prova { background-color: var(--prova); }
+.lable-frequencia { background-color: var(--frequencia); }
+.lable-nota { background-color: var(--nota); }
+.p_lable { font-family: "Arimo", sans-serif; font-weight: 600; font-size: 11px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ===========================
+   VAGAS — ajustes específicos
+   =========================== */
+
+/* Abas (Todas/Minhas/Salvas) — mãozinha + movimento suave */
+[aria-label="Abas de Vagas"] .lable-frequencia {
+  cursor: pointer;
+  transition: box-shadow .2s ease, transform .18s ease;
+  will-change: transform;
+}
+[aria-label="Abas de Vagas"] .lable-frequencia:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+[aria-label="Abas de Vagas"] .lable-frequencia:active { transform: translateY(-1px); }
+[aria-label="Abas de Vagas"] .lable-frequencia.is-active { box-shadow: 0 0 0 2px var(--cor-click) inset; }
+
+/* Botões/Chips (Candidatar/Salvar/Limpar/Remover em massa) */
+#jobs_list .chip-btn,
+#jobs_empty #clear_filters,
+#jobs_toolbar .chip-btn {
+  position: static; top: auto; transform: none; display: inline-block;
+  border: none; padding: 8px 12px; border-radius: 999px; color: #fff;
+  cursor: pointer; font-size: 12px; background-color: var(--frequencia);
+  transition: box-shadow .2s ease, transform .18s ease;
+  will-change: transform;
+}
+#jobs_list .chip-btn:hover,
+#jobs_empty #clear_filters:hover,
+#jobs_toolbar .chip-btn:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+#jobs_list .chip-btn:active,
+#jobs_empty #clear_filters:active,
+#jobs_toolbar .chip-btn:active { transform: translateY(-1px); }
+#jobs_list .chip-btn:focus-visible,
+#jobs_empty #clear_filters:focus-visible,
+#jobs_toolbar .chip-btn:focus-visible { outline: 2px solid var(--cor-click); outline-offset: 2px; }
+
+/* Variante para ações em massa */
+#jobs_toolbar .chip-btn.danger { background-color: var(--prova); }
+
+/* Layout das áreas de vagas */
+#jobs_list .comp-aula h3 { margin: 0 0 4px 0; }
+#jobs_list .comp-aula .font { margin: 0; }
+
+/* Topo do card: esquerda (título/empresa) x direita (anúncio/badges) */
+#jobs_list .meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+#jobs_list .meta-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+#jobs_list .anuncio {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--cor-text);
+}
+#jobs_list .badges { display:flex; gap:6px; flex-wrap:wrap; }
+
+/* Descrição curtinha na lista */
+#jobs_list .desc { margin-top: 6px; color: var(--cor-text); opacity: 0.9; }
+
+/* Ações */
+#jobs_list .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+
+/* Card clicável (abre modal) */
+#jobs_list .job-card { cursor: pointer; transition: box-shadow .18s ease, transform .18s ease; }
+#jobs_list .job-card:hover { box-shadow: 0 6px 16px rgba(0,0,0,.12); transform: translateY(-1px); }
+
+/* Bulk actions container dentro da toolbar */
+#jobs_toolbar .bulk-actions { display: none; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+/* ===========================
+   MODAL de detalhes da vaga
+   =========================== */
+#job_modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 9999;
+}
+#job_modal.show { display: flex; animation: fadeIn .15s ease; }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+
+.job-modal-content {
+  width: 92%; max-width: 760px;
+  background: #fff; border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.22);
+  padding: 18px;
+  transform: translateY(6px) scale(.98);
+  animation: popIn .18s ease forwards;
+}
+@keyframes popIn {
+  to { transform: translateY(0) scale(1); }
+}
+
+.job-modal-header { display:flex; justify-content: space-between; align-items: start; gap: 12px; }
+.job-modal-left h3 { margin: 0 0 4px 0; }
+.job-modal-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+
+.job-modal-close {
+  background: transparent; border: none; cursor: pointer;
+  font-size: 22px; line-height: 1; padding: 4px; margin-left: 6px;
+  color: var(--cor-click);
+  border-radius: 8px; transition: background .18s ease, transform .18s ease;
+}
+.job-modal-close:hover { background: rgba(0,0,0,.06); transform: translateY(-1px); }
+.job-modal-close:focus-visible { outline: 2px solid var(--cor-click); outline-offset: 2px; }
+
+.job-modal-section { margin-top: 10px; }
+.job-meta-row { display:flex; align-items:center; gap: 14px; flex-wrap: wrap; }
+.job-salario { display:flex; align-items:center; gap:6px; }
+.job-techs { display:flex; gap:6px; flex-wrap: wrap; }
+
+.chip-tag {
+  display:inline-block; padding:6px 10px; border-radius:999px;
+  background: var(--md-sys-color-primary-container); color: var(--cor-text);
+  font-size: 11px;
+}
+
+/* Reuso de .chip-btn para ações dentro do modal já está acima */
